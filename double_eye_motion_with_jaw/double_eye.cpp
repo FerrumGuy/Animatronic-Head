@@ -3,7 +3,7 @@
 Eyes::Eyes(int left_leftRightPin, int left_upDownPin, int left_eyeLidPin,int right_leftRightPin, int right_upDownPin, int right_eyeLidPin, int jaw_jawPin)
     : leftEye(left_leftRightPin, left_upDownPin, left_eyeLidPin, jaw_jawPin), 
       rightEye(right_leftRightPin, right_upDownPin, right_eyeLidPin, jaw_jawPin),
-      jaw(jaw_jawPin) {
+      jaw(-1, -1, -1, jaw_jawPin) {  // Pass -1 for unused servo pins
 
 
 }
