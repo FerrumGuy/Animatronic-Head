@@ -10,10 +10,19 @@ Eye::Eye(int leftRight, int upDown, int eyeLid, int jaw)  {
 
 void Eye::init() {
 
-  leftRightServo.attach(leftRightPin);
-  upDownServo.attach(upDownPin);
-  eyeLidServo.attach(eyeLidPin);
-  jawServo.attach(jawPin);
+  // Only attach servos if their pins are valid (not -1)
+  if (leftRightPin != -1) {
+    leftRightServo.attach(leftRightPin);
+  }
+  if (upDownPin != -1) {
+    upDownServo.attach(upDownPin);
+  }
+  if (eyeLidPin != -1) {
+    eyeLidServo.attach(eyeLidPin);
+  }
+  if (jawPin != -1) {
+    jawServo.attach(jawPin);
+  }
 
   currTime = millis();
   eyeOpenDuration = random(eyeOpenMin, eyeOpenMax);  //random time to keep eye open between blinks
@@ -58,10 +67,18 @@ void Eye::moveServosTo(int leftRightServoPos, int upDownServoPos, int eyeLidServ
   eyeLidServoPos = constrain(eyeLidServoPos,eyeLidClose,eyeLidOpen);
   jawServoPos = constrain(jawServoPos,jawClose,jawOpen);
 
-  leftRightServo.setEaseTo(leftRightServoPos,speed);
-  upDownServo.setEaseTo(upDownServoPos,speed);
-  eyeLidServo.setEaseTo(eyeLidServoPos,speed);
-  jawServo.setEaseTo(jawServoPos,speed);
+  if (leftRightPin != -1) {
+    leftRightServo.setEaseTo(leftRightServoPos,speed);
+  }
+  if (upDownPin != -1) {
+    upDownServo.setEaseTo(upDownServoPos,speed);
+  }
+  if (eyeLidPin != -1) {
+    eyeLidServo.setEaseTo(eyeLidServoPos,speed);
+  }
+  if (jawPin != -1) {
+    jawServo.setEaseTo(jawServoPos,speed);
+  }
   
   synchronizeAllServosAndStartInterrupt(false);      // Do not start interrupt, because we use updateAllServos() every 20 ms below
     do {
@@ -74,8 +91,12 @@ void Eye::home() {
   //home servos, move to central position with eyelid open
   moveServosTo(leftRightCentre,upDownCentre,eyeLidClose,jawClose,60);
   delay(250);
-  eyeLidServo.easeTo(eyeLidOpen,60);
-  jawServo.easeTo(jawOpen,60);
+  if (eyeLidPin != -1) {
+    eyeLidServo.easeTo(eyeLidOpen,60);
+  }
+  if (jawPin != -1) {
+    jawServo.easeTo(jawOpen,60);
+  }
 
 }
 
@@ -108,7 +129,7 @@ void Eye::eyeMotion() {
       if (!random(0, 5)) {                                           //1 in x chance
         jawOpenDuration = random(jawOpenShort, jawOpenShort + 100);  //short chomp (double)
       } else {
-        eyeOpenDuration = random(jawOpenMin, jawOpenMax);  //next random duration for chomping
+        jawOpenDuration = random(jawOpenMin, jawOpenMax);  //next random duration for chomping (fixed from eyeOpenDuration)
       }
       lastChompTime = millis();
     }
@@ -137,8 +158,12 @@ void Eye::moveEyeBall(int speed, int posLR, int posUD) {
   posLR = constrain(posLR, leftRightLower, leftRightUpper);
   posUD = constrain(posUD, upDownLower, upDownUpper);
 
-  leftRightServo.setEaseTo(posLR,speed);
-  upDownServo.setEaseTo(posUD,speed);
+  if (leftRightPin != -1) {
+    leftRightServo.setEaseTo(posLR,speed);
+  }
+  if (upDownPin != -1) {
+    upDownServo.setEaseTo(posUD,speed);
+  }
   synchronizeAllServosAndStartInterrupt(false);      // Do not start interrupt, because we use updateAllServos() every 20 ms below
   do {
     delay(20); // Optional 20ms delay. Can be less.
@@ -146,6 +171,8 @@ void Eye::moveEyeBall(int speed, int posLR, int posUD) {
 }
 
 void Eye::blink(int closeSpeed, int openSpeed, int closeDelay, int openPosition) {
+  if (eyeLidPin == -1) return; // Skip if no eyelid servo
+  
   eyeLidServo.setEaseTo(eyeLidClose, closeSpeed);
 
   synchronizeAllServosAndStartInterrupt(false);      // Do not start interrupt, because we use updateAllServos() every 20 ms below
@@ -157,6 +184,8 @@ void Eye::blink(int closeSpeed, int openSpeed, int closeDelay, int openPosition)
 }
 
 void Eye::chomp(int closeSpeed, int openSpeed, int closeDelay, int openPosition) {
+  if (jawPin == -1) return; // Skip if no jaw servo
+  
   jawServo.setEaseTo(jawClose, closeSpeed);
 
   synchronizeAllServosAndStartInterrupt(false);      // Do not start interrupt, because we use updateAllServos() every 20 ms below
