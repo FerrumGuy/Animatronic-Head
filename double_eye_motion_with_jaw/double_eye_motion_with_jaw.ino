@@ -19,7 +19,7 @@ void setup() {
   Eyes.leftEye.setUpDownLowerUpperCentre(75,135,105);
   Eyes.leftEye.setEyeLidOpenClose(75,131);
 
-  Eyes.jaw.setJawOpenClose(35,80);
+  Eyes.jaw.setJawOpenClose(80,35);
 
   //Setup Eyes
   Eyes.init(); 
