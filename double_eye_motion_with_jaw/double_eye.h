@@ -44,9 +44,4 @@ class Eyes {
 };
 
 #endif
-//          __
-// (QUACK)>(o )___
-//          ( ._> /
-//           `---'
-// Morgan Manly
-// 16/03/2025
+
