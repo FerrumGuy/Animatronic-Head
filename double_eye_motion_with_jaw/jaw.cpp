@@ -1,5 +1,5 @@
 #include "jaw.h"
-// Don't include ServoEasing.hpp here - only include it in ONE cpp file to avoid linker errors
+#include "ServoEasing.hpp"
 
 Jaw::Jaw(int pin) {
   jawPin = pin;
