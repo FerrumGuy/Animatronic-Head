@@ -18,9 +18,6 @@ void Eyes::init() {
   lastBlinkTime = currTime + eyeOpenDuration; //do this first
   eyeStillDuration = random(eyeStillMin, eyeStillMax);  //random time to keep eye still before moving
   lastMoveTime = currTime;
-  
-  jawOpenDuration = random(jawOpenMin, jawOpenMax);  //random time to keep jaw open between chomps
-  lastChompTime = currTime + jawOpenDuration;
 }
 
 void Eyes::home() {
@@ -84,18 +81,6 @@ void Eyes::eyeMotion(float depth) {
     
     lastMoveTime = millis();
   }
-
-  // Jaw motion logic
-  currTime = millis();
-  if ((currTime - lastChompTime) > jawOpenDuration) {  //chomp event
-    chomp(random(800, 1000), random(900, 1000), 0);      
-    if (!random(0, 5)) {                                           //1 in x chance
-      jawOpenDuration = random(jawOpenShort, jawOpenShort + 100);  //short chomp (double)
-    } else {
-      jawOpenDuration = random(jawOpenMin, jawOpenMax);  //next random duration for chomping
-    }
-    lastChompTime = millis();
-  }
 }
 
 void Eyes::blink(int closeSpeed, int openSpeed, int closeDelay) {
@@ -142,7 +127,7 @@ void Eyes::lookAt(float posX,float posY, float posZ,int speed) {
   float right_UD = rightEye.upDownCentre - getInverseKin(right_angleUD,UP_coeffs,3); //reversed because motor moves other way
 
   left_LR = constrain(left_LR,leftEye.leftRightLower,leftEye.leftRightUpper);
-  right_LR = constrain(right_LR,rightEye.leftRightLower,rightEye.leftRightUpper);
+  right_LR = constrain(right_LR,rightEye.leftRightLower,rightEye.rightRightUpper);
   
   left_UD = constrain(left_UD,leftEye.upDownLower,leftEye.upDownUpper);
   right_UD = constrain(right_UD,rightEye.upDownLower,rightEye.upDownUpper);
