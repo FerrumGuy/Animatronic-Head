@@ -78,10 +78,4 @@ class Eye {
 };
 
 #endif
-//          __
-// (QUACK)>(o )___
-//          ( ._> /
-//           `---'
-// Morgan Manly
-// 12/03/2025
 
